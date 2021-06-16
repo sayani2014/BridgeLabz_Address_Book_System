@@ -1,9 +1,10 @@
 /**
- * Ability to delete existing contact person using their name
- * Use console to delete person details
+ * Ability to add multiple person to Address Book
+ * Use Console to add person details one at a time
+ * Use Collection Class to maintain multiple contact persons in Address Book
  *
  * @author: SAYANI KOLEY
- * @since: 15.06.2021
+ * @since: 16.06.2021
  */
 
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ class AddressBook {
         int index = 0;
         for(int i=0; i < persons.size(); i++) {
             if(persons.get(i).first_name.equals(contact))
-                index = persons.get(i).first_name.indexOf(p.first_name);
+                index = persons.get(i).first_name.indexOf(p.first_name, persons.indexOf(i));
         }
         return index;
     }
@@ -163,45 +164,36 @@ public class AddressBookSystem {
     private static final int ADD = 1;
     private static final int EDIT = 2;
     private static final int DELETE = 3;
-    private static final int QUIT = 4;
+    private static final int DISPLAY = 4;
+    private static final int QUIT = 5;
     static AddressBook add_Book = new AddressBook();
 
     public static void main(String args[]){
+        boolean flag = true;
         Scanner input = new Scanner(System.in);
         int option;
-        //Option to choose
-        option = menu(input);
-        //Add contact detail
-        performFunction(option, input);
-        System.out.print("Do you want to continue: Y/N ");
-        String ans = input.next().toString();
-        if(ans.equals("Y")) {
+
+        while (flag) {
+            //Option to choose
             option = menu(input);
-            performFunction(option, input);
+
+            //Add contact detail
+            flag = performFunction(option, input);
         }
-        else
-            System.out.println("Thank you!");
-        System.out.print("Do you want to continue: Y/N ");
-        ans = input.next().toString();
-        if(ans.equals("Y")) {
-            option = menu(input);
-            performFunction(option, input);
-        }
-        else
-            System.out.println("Thank you!");
     }
     public static int menu(Scanner input) {
         System.out.println("Select option: ");
         System.out.println("1. Add a new contact in the address book.");
         System.out.println("2. Edit contact in the address book.");
         System.out.println("3. Delete contact in the address book.");
-        System.out.println("4. Quit.");
+        System.out.println("4. Display all values from address book.");
+        System.out.println("5. Quit.");
         int option = input.nextInt();
 
         return option;
     }
-    public static void performFunction(int option, Scanner input) {
-
+    public static boolean performFunction(int option, Scanner input) {
+        boolean flag = true;
         switch(option) {
             case ADD:
                 System.out.println("Enter the number of contacts you want to add: ");
@@ -210,26 +202,30 @@ public class AddressBookSystem {
                     //Insert contact details
                     add_Book.insertContactDetails();
                 }
+                flag = true;
                 break;
             case EDIT:
                 System.out.println("Enter the name of the contact that you want to replace");
                 String replacedName = input.next().toString();
                 add_Book.updateContact(replacedName);
+                flag = true;
                 break;
             case DELETE:
                 System.out.println("Enter the name of the contact that you want to delete");
                 String deletedName = input.next().toString();
                 add_Book.deleteContact(deletedName);
+                flag = true;
+                break;
+            case DISPLAY:
+                //Display the values
+                add_Book.display(add_Book.persons);
+                flag = true;
                 break;
             case QUIT:
+                flag = false;
                 System.out.println("Thank you for referring the address book.");
                 break;
-            default:
-                System.out.println("Wrong Option! Please check for the option correctly!");
-                break;
         }
-        //Display the values
-        add_Book.display(add_Book.persons);
-
+        return flag;
     }
 }
