@@ -31,7 +31,7 @@ public class AddressBookSystem {
     public static void main(String args[]){
 
         //Create object and pass the values
-        AddressBookSystem obj = new AddressBookSystem("SAYANI","KOLEY","Howrah", "Howrah", "West Bengal", 711101, "7908904096", "sayanikoley8@gmail.com");
+        AddressBookSystem obj = new AddressBookSystem("SAYANI","KOLEY","Howrah", "Howrah", "West Bengal", 711101, "7908", "sayanikoley8@gmail.com");
 
         //Display the values of object
         obj.display();
