@@ -26,7 +26,7 @@ public class AddressBookSystem {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String args[]){
-        Hashtable<String, PersonInfo> personInfoDict = new Hashtable<>();
+        Hashtable<String, ArrayList<PersonInfo>> personInfoDict = new Hashtable<>();
 
         boolean flag = true;
         int option;
@@ -36,7 +36,7 @@ public class AddressBookSystem {
                 case ADD:
                     System.out.println("\n" + "Add a new Address Book");
                     personInfoDict = add_Book.insertContactDetails();
-                    System.out.println(personInfoDict);
+                    System.out.println(personInfoDict + "\n");
                     break;
                 case EDIT:
                     System.out.print("\n" + "Enter the name of the Address Book that you want to replace: ");
