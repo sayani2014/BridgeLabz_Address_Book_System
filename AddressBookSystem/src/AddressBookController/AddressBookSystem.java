@@ -37,7 +37,7 @@ public class AddressBookSystem {
                 case ADD:
                     System.out.println("\n" + "Add a new Address Book");
                     personInfoDict = add_Book.insertContactDetails();
-                    System.out.println(personInfoDict + "\n");
+                    //System.out.println(personInfoDict + "\n");
                     break;
                 case EDIT:
                     System.out.print("\n" + "Enter the name of the Address Book that you want to replace: ");

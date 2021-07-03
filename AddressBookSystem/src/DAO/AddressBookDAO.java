@@ -21,20 +21,20 @@ public class AddressBookDAO implements AddressBookInterface {
 
         System.out.print("Enter the First Name: ");
         p.setFirst_name(input.next().toString());
-        System.out.print("Enter the Last Name: ");
-        p.setLast_name(input.next().toString());
-        System.out.print("Enter the Address: ");
-        p.setAddress(input.next().toString());
+//        System.out.print("Enter the Last Name: ");
+//        p.setLast_name(input.next().toString());
+//        System.out.print("Enter the Address: ");
+//        p.setAddress(input.next().toString());
         System.out.print("Enter the City: ");
         p.setCity(input.next().toString());
         System.out.print("Enter the State: ");
         p.setState(input.next().toString());
-        System.out.print("Enter the Zip: ");
-        p.setZip(input.nextInt());
-        System.out.print("Enter the Phone Number: ");
-        p.setPhone_number(input.next().toString());
-        System.out.print("Enter the Email: ");
-        p.setEmail(input.next().toString());
+//        System.out.print("Enter the Zip: ");
+//        p.setZip(input.nextInt());
+//        System.out.print("Enter the Phone Number: ");
+//        p.setPhone_number(input.next().toString());
+//        System.out.print("Enter the Email: ");
+//        p.setEmail(input.next().toString());
 
         if (personInfoDict.containsKey(addressBookName)) {
             ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
@@ -181,13 +181,15 @@ public class AddressBookDAO implements AddressBookInterface {
     }
 
     /*Purpose : Using Java Streams to search for Person in a City or State across the multiple AddressBook.
+                Maintain Dictionary of City and Person as well as State and Person
+                Finally view Persons by City or State
 
       Dated : 03.07.2021
     */
 
     @Override
     public void searchPerson() {
-        Hashtable<String, ArrayList<String>> hCity = new Hashtable<>();
+        Hashtable<String, Hashtable<String, ArrayList<String>>> hSearch = new Hashtable<>();
 
         System.out.println("Press 1 to search person by city");
         System.out.println("Press 2 to search person by state");
@@ -201,13 +203,15 @@ public class AddressBookDAO implements AddressBookInterface {
                 personInfoDict.keySet().forEach(entry -> {
                     ArrayList<PersonInfo> value = personInfoDict.get(entry);
                     List<String> city = value.stream().map(PersonInfo::getCity).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
                     ArrayList<String> firstName = new ArrayList<>();
                     for ( int k = 0; k < city.size(); k++)  {
                         if (city.get(k).equals(cityName)) {
                             firstName.add(value.get(k).getFirst_name());
                         }
+                        person.put(cityName , firstName);
                     }
-                    hCity.put(entry , firstName);
+                    hSearch.put(entry , person);
                 });
 
                 break;
@@ -217,19 +221,20 @@ public class AddressBookDAO implements AddressBookInterface {
 
                 personInfoDict.keySet().forEach(entry -> {
                     ArrayList<PersonInfo> value = personInfoDict.get(entry);
-                    List<String> state = value.stream().map(PersonInfo::getState).collect(Collectors.toList());
+                    List<String> city = value.stream().map(PersonInfo::getState).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
                     ArrayList<String> firstName = new ArrayList<>();
-                    for ( int k = 0; k < state.size(); k++)  {
-                        if (state.get(k).equals(stateName)) {
+                    for ( int k = 0; k < city.size(); k++)  {
+                        if (city.get(k).equals(stateName)) {
                             firstName.add(value.get(k).getFirst_name());
                         }
+                        person.put(stateName , firstName);
                     }
-                    hCity.put(entry , firstName);
+                    hSearch.put(entry , person);
                 });
 
                 break;
         }
-
-        System.out.println(hCity);
+        System.out.println(hSearch);
     }
 }
