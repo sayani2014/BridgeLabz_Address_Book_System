@@ -21,20 +21,20 @@ public class AddressBookDAO implements AddressBookInterface {
 
         System.out.print("Enter the First Name: ");
         p.setFirst_name(input.next().toString());
-//        System.out.print("Enter the Last Name: ");
-//        p.setLast_name(input.next().toString());
-//        System.out.print("Enter the Address: ");
-//        p.setAddress(input.next().toString());
+        System.out.print("Enter the Last Name: ");
+        p.setLast_name(input.next().toString());
+        System.out.print("Enter the Address: ");
+        p.setAddress(input.next().toString());
         System.out.print("Enter the City: ");
         p.setCity(input.next().toString());
         System.out.print("Enter the State: ");
         p.setState(input.next().toString());
-//        System.out.print("Enter the Zip: ");
-//        p.setZip(input.nextInt());
-//        System.out.print("Enter the Phone Number: ");
-//        p.setPhone_number(input.next().toString());
-//        System.out.print("Enter the Email: ");
-//        p.setEmail(input.next().toString());
+        System.out.print("Enter the Zip: ");
+        p.setZip(input.nextInt());
+        System.out.print("Enter the Phone Number: ");
+        p.setPhone_number(input.next().toString());
+        System.out.print("Enter the Email: ");
+        p.setEmail(input.next().toString());
 
         if (personInfoDict.containsKey(addressBookName)) {
             ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
