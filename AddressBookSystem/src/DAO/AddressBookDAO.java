@@ -2,18 +2,22 @@ package DAO;
 
 import AddressBookModel.PersonInfo;
 import AddressBookService.AddressBookInterface;
-import java.util.Hashtable;
-import java.util.Scanner;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class AddressBookDAO implements AddressBookInterface {
     Scanner input = new Scanner(System.in);
-    Hashtable<String, PersonInfo> personInfoDict = new Hashtable<>();
+    Hashtable<String, ArrayList<PersonInfo>> personInfoDict = new Hashtable<>();
     PersonInfo p = null;
+    ArrayList<PersonInfo> pList = new ArrayList<>();
 
     @Override
-    public Hashtable<String, PersonInfo> insertContactDetails() {
+    public Hashtable<String, ArrayList<PersonInfo>> insertContactDetails() {
+        boolean found = false;
         p = new PersonInfo();
-        System.out.print("Enter the Address Book Name: ");
+        System.out.print("\nEnter the Address Book Name: ");
         String addressBookName = input.next();
 
         System.out.print("Enter the First Name: ");
@@ -33,116 +37,209 @@ public class AddressBookDAO implements AddressBookInterface {
         System.out.print("Enter the Email: ");
         p.setEmail(input.next().toString());
 
-        if(!personInfoDict.containsKey(addressBookName))
-            personInfoDict.put(addressBookName, p);
-        else
-            System.out.println("Duplicate Address Book Name");
+        if (personInfoDict.containsKey(addressBookName)) {
+            ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
+            for (int j = 0; j < value.size(); j++) {
+
+               /*Purpose : Using Java Streams to search for duplicate contacts.
+                          If duplicate contact exist, then do not insert the contact details.
+
+                Dated : 03.07.2021
+               */
+              
+                List<String> names = value.stream().map(PersonInfo::getFirst_name).collect(Collectors.toList());
+             
+                for ( int k = 0; k < names.size(); k++)  {
+                  if(names.get(j).equals(p.getFirst_name())) {
+                      found = true;
+                      break;
+                  }
+                }
+            }
+            if (found == true)
+                System.out.println("\nDuplicate First Name in Address Book!\n");
+            else {
+                value.add(p);
+                personInfoDict.put(addressBookName, value);
+            }
+        }
+        else {
+            pList = new ArrayList<>();
+            pList.add(p);
+            personInfoDict.put(addressBookName, pList);
+        }
 
         return personInfoDict;
     }
 
     @Override
-    public void updateContact(String addressBookName, Hashtable<String, PersonInfo> personInfoDict) {
+    public void updateContact(String addressBookName, Hashtable<String, ArrayList<PersonInfo>> personInfoDict) {
         boolean flag = findContact(addressBookName, personInfoDict);
         if (flag == true) {
             editContactDetails(addressBookName, personInfoDict);
         } else {
-            System.out.println("No such contact found to update");
+            System.out.println("\nNo such Address Book found to update!\n");
         }
     }
 
     @Override
-    public boolean findContact(String addressBookName, Hashtable<String, PersonInfo> personInfoDict) {
+    public boolean findContact(String addressBookName, Hashtable<String, ArrayList<PersonInfo>> personInfoDict) {
         for (int i = 0; i < personInfoDict.size(); i++) {
-            if (personInfoDict.containsKey(addressBookName))  //.get(i)).getFirst_name().equals(contact))
+            if (personInfoDict.containsKey(addressBookName))
                 return true;
         }
         return false;
     }
 
     @Override
-    public void editContactDetails(String addressBookName, Hashtable<String, PersonInfo> personInfoDict) {
-        for(int i=0; i<=personInfoDict.size(); i++) {
-            if(personInfoDict.containsKey(addressBookName)) {
+    public void editContactDetails(String addressBookName, Hashtable<String, ArrayList<PersonInfo>> personInfoDict) {
+        System.out.print("\nEnter the first name you want to edit the details for : ");
+        String fName = input.next();
+
+        ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
+        for (int j = 0; j < value.size(); j++) {
+            if(value.get(j).getFirst_name().equals(fName)) {
                 System.out.println("Choose your edit option: ");
-                System.out.println("1. First Name");
-                System.out.println("2. Last Name");
-                System.out.println("3. Address");
-                System.out.println("4. City");
-                System.out.println("5. State");
-                System.out.println("6. Zip");
-                System.out.println("7. Phone Number");
-                System.out.println("8. Email");
+                System.out.println("1. Last Name");
+                System.out.println("2. Address");
+                System.out.println("3. City");
+                System.out.println("4. State");
+                System.out.println("5. Zip");
+                System.out.println("6. Phone Number");
+                System.out.println("7. Email");
                 int editOption = input.nextInt();
 
                 switch (editOption) {
                     case 1:
-                        System.out.print("Enter new First Name: ");
-                        p.setFirst_name(input.next().toString());
+                        System.out.println("Enter new Last Name: ");
+                        value.get(j).setLast_name(input.next().toString());
                         break;
                     case 2:
-                        System.out.println("Enter new Last Name: ");
-                        p.setLast_name(input.next().toString());
+                        System.out.println("Enter new Address: ");
+                        value.get(j).setAddress(input.next().toString());
                         break;
                     case 3:
-                        System.out.println("Enter new Address: ");
-                        p.setAddress(input.next().toString());
+                        System.out.println("Enter new City: ");
+                        value.get(j).setCity(input.next().toString());
                         break;
                     case 4:
-                        System.out.println("Enter new City: ");
-                        p.setCity(input.next().toString());
+                        System.out.println("Enter new State: ");
+                        value.get(j).setState(input.next().toString());
                         break;
                     case 5:
-                        System.out.println("Enter new State: ");
-                        p.setState(input.next().toString());
+                        System.out.println("Enter new Zip: ");
+                        value.get(j).setZip(input.nextInt());
                         break;
                     case 6:
-                        System.out.println("Enter new Zip: ");
-                        p.setZip(input.nextInt());
+                        System.out.println("Enter new Phone Number: ");
+                        value.get(j).setPhone_number(input.next().toString());
                         break;
                     case 7:
-                        System.out.println("Enter new Phone Number: ");
-                        p.setPhone_number(input.next().toString());
-                        break;
-                    case 8:
                         System.out.println("Enter new Email: ");
-                        p.setEmail(input.next().toString());
+                        value.get(j).setEmail(input.next().toString());
                         break;
                 }
-                System.out.println("Updated successfully!");
+                System.out.println("\nUpdated successfully!\n");
                 break;
             }
             else
-                System.out.println("No Address Book Found!");
+                System.out.println("\nNo First Name Found!\n");
         }
     }
 
     @Override
-    public void deleteContact(String deletedName, Hashtable<String, PersonInfo> personInfoDict) {
-        boolean flag = findContact(deletedName, personInfoDict);
+    public void deleteContact(String addressBookName, Hashtable<String, ArrayList<PersonInfo>> personInfoDict) {
+        boolean found = false;
+        boolean flag = findContact(addressBookName, personInfoDict);
 
         if (flag == true) {
-            for (int i = 0; i < personInfoDict.size(); i++) {
-                if(personInfoDict.containsKey(deletedName)) {
-                    personInfoDict.remove(deletedName);
-                    System.out.println("Contact in Address Book Deleted.");
+            System.out.print("\nEnter the first name you want to delete : ");
+            String fName = input.next();
+
+            ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
+            for (int j = 0; j < value.size(); j++) {
+                if(value.get(j).getFirst_name().equals(fName)) {
+                    value.remove(j);
+                    found = true;
+                    break;
                 }
-                else
-                    System.out.println("No contacts found in the Address Book.");
             }
+            if( found == true) {
+                System.out.println("\nContact in Address Book Deleted.\n");
+            }
+            else
+                System.out.println("\nNo such First Name found in the Address Book.\n");
         }
         else
-            System.out.println("No contacts found in the Address Book.");
+            System.out.println("\nNo contacts found in the Address Book.\n");
     }
 
     @Override
-    public void displayCompanyContacts(Hashtable<String, PersonInfo> personInfoDict) {
-        /*System.out.println(personInfoDict.keySet());
-        personInfoDict.entrySet().forEach(entry -> {
-            System.out.println(entry.getKey() + "->" + entry.getValue() + "\n");
-        });*/
+    public void displayCompanyContacts(Hashtable<String, ArrayList<PersonInfo>> personInfoDict) {
         personInfoDict.keySet().forEach(entry -> {
             System.out.println(entry + "->" + personInfoDict.get(entry)+ "\n");
         });
+    }
+
+    /*Purpose : Using Java Streams to search for Person in a City or State across the multiple AddressBook.
+                Maintain Dictionary of City and Person as well as State and Person
+                Finally get the count of Persons by City or State
+
+      Dated : 03.07.2021
+    */
+
+    @Override
+    public void searchPerson() {
+        Hashtable<String, Hashtable<String, ArrayList<String>>> hSearch = new Hashtable<>();
+        AtomicInteger count = new AtomicInteger();
+
+        System.out.println("Press 1 to search person by city");
+        System.out.println("Press 2 to search person by state");
+        int choice = input.nextInt();
+
+        switch (choice) {
+            case 1:
+                System.out.print("\nEnter the city name to search: ");
+                String cityName = input.next();
+
+                personInfoDict.keySet().forEach(entry -> {
+                    ArrayList<PersonInfo> value = personInfoDict.get(entry);
+                    List<String> city = value.stream().map(PersonInfo::getCity).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
+                    ArrayList<String> firstName = new ArrayList<>();
+                    for ( int k = 0; k < city.size(); k++)  {
+                        if (city.get(k).equals(cityName)) {
+                            firstName.add(value.get(k).getFirst_name());
+                            count.getAndIncrement();
+                        }
+                        person.put(cityName , firstName);
+                    }
+                    hSearch.put(entry , person);
+                });
+
+                break;
+            case 2:
+                System.out.print("\nEnter the state name to search: ");
+                String stateName = input.next();
+
+                personInfoDict.keySet().forEach(entry -> {
+                    ArrayList<PersonInfo> value = personInfoDict.get(entry);
+                    List<String> city = value.stream().map(PersonInfo::getState).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
+                    ArrayList<String> firstName = new ArrayList<>();
+                    for ( int k = 0; k < city.size(); k++)  {
+                        if (city.get(k).equals(stateName)) {
+                            firstName.add(value.get(k).getFirst_name());
+                            count.getAndIncrement();
+                        }
+                        person.put(stateName , firstName);
+                    }
+                    hSearch.put(entry , person);
+                });
+
+                break;
+        }
+        System.out.println("\nViewing Persons by City or State\n" +hSearch);
+        System.out.println("\nNumber of contact persons i.e. count by City or State is : " +count +"\n");
     }
 }
