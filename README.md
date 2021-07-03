@@ -1,5 +1,3 @@
-
-
 ## Usecases
 1. Ability to create a Contacts in Address Book with first and last names, address, city, state, zip, phone number and email.
 2. Ability to add a new Contact to Address Book 
@@ -22,3 +20,4 @@
 8. Search for Person in a City or State across the multiple AddressBook.
 9. View Persons by City or State.
 10. Get the count of Persons by City or State
+
