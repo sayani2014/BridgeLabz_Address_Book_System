@@ -4,6 +4,7 @@ import AddressBookModel.PersonInfo;
 import AddressBookService.AddressBookInterface;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class AddressBookDAO implements AddressBookInterface {
@@ -40,24 +41,20 @@ public class AddressBookDAO implements AddressBookInterface {
             ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
             for (int j = 0; j < value.size(); j++) {
 
-                  /*Purpose : Using Java Streams to search for duplicate contacts.
-                              If duplicate contact exist, then do not insert the contact details.
+               /*Purpose : Using Java Streams to search for duplicate contacts.
+                          If duplicate contact exist, then do not insert the contact details.
 
-                    Dated : 03.07.2021
-                   */
-
-                  List<String> names = value.stream().map(PersonInfo::getFirst_name).collect(Collectors.toList());
-                  //System.out.println(names);
+                Dated : 03.07.2021
+               */
+              
+                List<String> names = value.stream().map(PersonInfo::getFirst_name).collect(Collectors.toList());
+             
                 for ( int k = 0; k < names.size(); k++)  {
                   if(names.get(j).equals(p.getFirst_name())) {
                       found = true;
                       break;
                   }
                 }
-//                if (value.get(j).getFirst_name().equals(p.getFirst_name())) {
-//                    found = true;
-//                    break;
-//                }
             }
             if (found == true)
                 System.out.println("\nDuplicate First Name in Address Book!\n");
@@ -182,5 +179,67 @@ public class AddressBookDAO implements AddressBookInterface {
         personInfoDict.keySet().forEach(entry -> {
             System.out.println(entry + "->" + personInfoDict.get(entry)+ "\n");
         });
+    }
+
+    /*Purpose : Using Java Streams to search for Person in a City or State across the multiple AddressBook.
+                Maintain Dictionary of City and Person as well as State and Person
+                Finally get the count of Persons by City or State
+
+      Dated : 03.07.2021
+    */
+
+    @Override
+    public void searchPerson() {
+        Hashtable<String, Hashtable<String, ArrayList<String>>> hSearch = new Hashtable<>();
+        AtomicInteger count = new AtomicInteger();
+
+        System.out.println("Press 1 to search person by city");
+        System.out.println("Press 2 to search person by state");
+        int choice = input.nextInt();
+
+        switch (choice) {
+            case 1:
+                System.out.print("\nEnter the city name to search: ");
+                String cityName = input.next();
+
+                personInfoDict.keySet().forEach(entry -> {
+                    ArrayList<PersonInfo> value = personInfoDict.get(entry);
+                    List<String> city = value.stream().map(PersonInfo::getCity).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
+                    ArrayList<String> firstName = new ArrayList<>();
+                    for ( int k = 0; k < city.size(); k++)  {
+                        if (city.get(k).equals(cityName)) {
+                            firstName.add(value.get(k).getFirst_name());
+                            count.getAndIncrement();
+                        }
+                        person.put(cityName , firstName);
+                    }
+                    hSearch.put(entry , person);
+                });
+
+                break;
+            case 2:
+                System.out.print("\nEnter the state name to search: ");
+                String stateName = input.next();
+
+                personInfoDict.keySet().forEach(entry -> {
+                    ArrayList<PersonInfo> value = personInfoDict.get(entry);
+                    List<String> city = value.stream().map(PersonInfo::getState).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
+                    ArrayList<String> firstName = new ArrayList<>();
+                    for ( int k = 0; k < city.size(); k++)  {
+                        if (city.get(k).equals(stateName)) {
+                            firstName.add(value.get(k).getFirst_name());
+                            count.getAndIncrement();
+                        }
+                        person.put(stateName , firstName);
+                    }
+                    hSearch.put(entry , person);
+                });
+
+                break;
+        }
+        System.out.println("\nViewing Persons by City or State\n" +hSearch);
+        System.out.println("\nNumber of contact persons i.e. count by City or State is : " +count +"\n");
     }
 }
