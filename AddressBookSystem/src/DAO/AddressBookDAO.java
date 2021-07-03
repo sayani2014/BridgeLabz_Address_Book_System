@@ -45,18 +45,15 @@ public class AddressBookDAO implements AddressBookInterface {
 
                 Dated : 03.07.2021
                */
-
+              
                 List<String> names = value.stream().map(PersonInfo::getFirst_name).collect(Collectors.toList());
+             
                 for ( int k = 0; k < names.size(); k++)  {
                   if(names.get(j).equals(p.getFirst_name())) {
                       found = true;
                       break;
                   }
                 }
-//              if (value.get(j).getFirst_name().equals(p.getFirst_name())) {
-//                    found = true;
-//                    break;
-//              }
             }
             if (found == true)
                 System.out.println("\nDuplicate First Name in Address Book!\n");
