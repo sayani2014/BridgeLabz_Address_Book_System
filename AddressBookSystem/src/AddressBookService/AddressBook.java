@@ -3,8 +3,8 @@ package AddressBookService;
 import AddressBookModel.PersonInfo;
 import DAO.AddressBookDAO;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddressBook implements AddressBookInterface{
     AddressBookDAO addressBookDAO = new AddressBookDAO();
@@ -38,4 +38,8 @@ public class AddressBook implements AddressBookInterface{
         addressBookDAO.displayCompanyContacts(personInfoDict);
     }
 
+    @Override
+    public void searchPerson() {
+        addressBookDAO.searchPerson();
+    }
 }
