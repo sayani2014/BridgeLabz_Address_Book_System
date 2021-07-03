@@ -4,6 +4,7 @@ import AddressBookModel.PersonInfo;
 import AddressBookService.AddressBookInterface;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class AddressBookDAO implements AddressBookInterface {
@@ -181,13 +182,16 @@ public class AddressBookDAO implements AddressBookInterface {
     }
 
     /*Purpose : Using Java Streams to search for Person in a City or State across the multiple AddressBook.
+                Maintain Dictionary of City and Person as well as State and Person
+                Finally get the count of Persons by City or State
 
       Dated : 03.07.2021
     */
 
     @Override
     public void searchPerson() {
-        Hashtable<String, ArrayList<String>> hCity = new Hashtable<>();
+        Hashtable<String, Hashtable<String, ArrayList<String>>> hSearch = new Hashtable<>();
+        AtomicInteger count = new AtomicInteger();
 
         System.out.println("Press 1 to search person by city");
         System.out.println("Press 2 to search person by state");
@@ -201,13 +205,16 @@ public class AddressBookDAO implements AddressBookInterface {
                 personInfoDict.keySet().forEach(entry -> {
                     ArrayList<PersonInfo> value = personInfoDict.get(entry);
                     List<String> city = value.stream().map(PersonInfo::getCity).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
                     ArrayList<String> firstName = new ArrayList<>();
                     for ( int k = 0; k < city.size(); k++)  {
                         if (city.get(k).equals(cityName)) {
                             firstName.add(value.get(k).getFirst_name());
+                            count.getAndIncrement();
                         }
+                        person.put(cityName , firstName);
                     }
-                    hCity.put(entry , firstName);
+                    hSearch.put(entry , person);
                 });
 
                 break;
@@ -217,19 +224,22 @@ public class AddressBookDAO implements AddressBookInterface {
 
                 personInfoDict.keySet().forEach(entry -> {
                     ArrayList<PersonInfo> value = personInfoDict.get(entry);
-                    List<String> state = value.stream().map(PersonInfo::getState).collect(Collectors.toList());
+                    List<String> city = value.stream().map(PersonInfo::getState).collect(Collectors.toList());
+                    Hashtable<String, ArrayList<String>> person = new Hashtable<>();
                     ArrayList<String> firstName = new ArrayList<>();
-                    for ( int k = 0; k < state.size(); k++)  {
-                        if (state.get(k).equals(stateName)) {
+                    for ( int k = 0; k < city.size(); k++)  {
+                        if (city.get(k).equals(stateName)) {
                             firstName.add(value.get(k).getFirst_name());
+                            count.getAndIncrement();
                         }
+                        person.put(stateName , firstName);
                     }
-                    hCity.put(entry , firstName);
+                    hSearch.put(entry , person);
                 });
 
                 break;
         }
-
-        System.out.println(hCity);
+        System.out.println("\nViewing Persons by City or State\n" +hSearch);
+        System.out.println("\nNumber of contact persons i.e. count by City or State is : " +count +"\n");
     }
 }
