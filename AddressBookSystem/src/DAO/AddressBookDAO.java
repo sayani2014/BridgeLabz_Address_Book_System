@@ -48,10 +48,12 @@ public class AddressBookDAO implements AddressBookInterface {
 
                   List<String> names = value.stream().map(PersonInfo::getFirst_name).collect(Collectors.toList());
                   //System.out.println(names);
+                for ( int k = 0; k < names.size(); k++)  {
                   if(names.get(j).equals(p.getFirst_name())) {
                       found = true;
                       break;
                   }
+                }
 //                if (value.get(j).getFirst_name().equals(p.getFirst_name())) {
 //                    found = true;
 //                    break;
