@@ -182,9 +182,9 @@ public class AddressBookDAO implements AddressBookInterface {
 
     /*Purpose : Using Java Streams to search for Person in a City or State across the multiple AddressBook.
                 Maintain Dictionary of City and Person as well as State and Person
-                Finally get the count of Persons by City or State
+                Finally get the count of Persons by City or State using java streams
 
-      @since : 03.07.2021
+      @since : 06.07.2021
     */
 
     @Override
@@ -209,10 +209,10 @@ public class AddressBookDAO implements AddressBookInterface {
                     for ( int k = 0; k < city.size(); k++)  {
                         if (city.get(k).equals(cityName)) {
                             firstName.add(value.get(k).getFirst_name());
-                            count.getAndIncrement();
                         }
                         person.put(cityName , firstName);
                     }
+                    count.addAndGet((int)firstName.stream().count());
                     hSearch.put(entry , person);
                 });
 
@@ -229,10 +229,10 @@ public class AddressBookDAO implements AddressBookInterface {
                     for ( int k = 0; k < city.size(); k++)  {
                         if (city.get(k).equals(stateName)) {
                             firstName.add(value.get(k).getFirst_name());
-                            count.getAndIncrement();
                         }
                         person.put(stateName , firstName);
                     }
+                    count.addAndGet((int)firstName.stream().count());
                     hSearch.put(entry , person);
                 });
 
