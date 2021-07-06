@@ -20,6 +20,8 @@
 7. Ability to ensure there is no Duplicate Entry of the same Person in a particular Address Book.
 8. Search for Person in a City or State across the multiple AddressBook.
 9. View Persons by City or State.
-10. Get the count of Persons by City or State
+10. Get the count of Persons by City or State.
+11. Sort the entries in the address book alphabetically by Person’s name.
+12. sort the entries in the address book by City, State, or Zip.
 
 
