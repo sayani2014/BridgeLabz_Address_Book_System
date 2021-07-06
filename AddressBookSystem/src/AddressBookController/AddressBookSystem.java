@@ -3,9 +3,13 @@
  * Each Address Book has a unique Name
  * Use Console to add new Address Book
  * Maintain Dictionary of Address Book Name to Address Book
+ * Avoid Duplicate Entries of First Name in Address Book
+ * Search and View the person details based on City or State in the Address Book
+ * Get the total count of person details based on a particular City or State in the Address Book
+ * Sort the entries in the address book alphabetically by Person’s name, City, State or Zip
  *
  * @author: SAYANI KOLEY
- * @since: 16.06.2021
+ * @since: 06.07.2021
  */
 
 package AddressBookController;
@@ -61,7 +65,7 @@ public class AddressBookSystem {
                     flag = true;
                     break;
                 case SORT_DATA:
-                    System.out.println("\n" + "Sort Address Book based on First Name of the Person");
+                    System.out.println("\n" + "Sort Address Book");
                     add_Book.sortPerson();
                     flag = true;
                     break;
