@@ -22,7 +22,8 @@ public class AddressBookSystem {
     private static final int DELETE = 3;
     private static final int DISPLAY = 4;
     private static final int SEARCH_CITY = 5;
-    private static final int QUIT = 6;
+    private static final int SORT_DATA = 6;
+    private static final int QUIT = 7;
     static AddressBook add_Book = new AddressBook();
     static Scanner input = new Scanner(System.in);
 
@@ -55,8 +56,13 @@ public class AddressBookSystem {
                     add_Book.displayCompanyContacts(personInfoDict);
                     break;
                 case SEARCH_CITY:
-                    System.out.println("\n" + "Search Address Book based on City");
+                    System.out.println("\n" + "Search Address Book based on City or State");
                     add_Book.searchPerson();
+                    flag = true;
+                    break;
+                case SORT_DATA:
+                    System.out.println("\n" + "Sort Address Book based on First Name of the Person");
+                    add_Book.sortPerson();
                     flag = true;
                     break;
                 case QUIT:

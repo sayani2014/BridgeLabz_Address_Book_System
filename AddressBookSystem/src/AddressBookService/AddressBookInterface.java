@@ -13,4 +13,5 @@ public interface AddressBookInterface {
     abstract void deleteContact(String deletedName, Hashtable<String, ArrayList<PersonInfo>> personInfoDict);
     abstract void displayCompanyContacts(Hashtable<String, ArrayList<PersonInfo>> personInfoDict);
     abstract void searchPerson();
+    abstract void sortPerson();
 }
