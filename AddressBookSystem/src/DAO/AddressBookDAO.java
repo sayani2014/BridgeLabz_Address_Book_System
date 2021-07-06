@@ -13,6 +13,12 @@ public class AddressBookDAO implements AddressBookInterface {
     PersonInfo p = null;
     ArrayList<PersonInfo> pList = new ArrayList<>();
 
+     /*Purpose : Using Java Streams to search for duplicate contacts.
+                          If duplicate contact exist, then do not insert the contact details.
+
+       @since : 03.07.2021
+     */
+
     @Override
     public Hashtable<String, ArrayList<PersonInfo>> insertContactDetails() {
         boolean found = false;
@@ -41,14 +47,7 @@ public class AddressBookDAO implements AddressBookInterface {
             ArrayList<PersonInfo> value = personInfoDict.get(addressBookName);
             for (int j = 0; j < value.size(); j++) {
 
-               /*Purpose : Using Java Streams to search for duplicate contacts.
-                          If duplicate contact exist, then do not insert the contact details.
-
-                Dated : 03.07.2021
-               */
-              
                 List<String> names = value.stream().map(PersonInfo::getFirst_name).collect(Collectors.toList());
-             
                 for ( int k = 0; k < names.size(); k++)  {
                   if(names.get(j).equals(p.getFirst_name())) {
                       found = true;
@@ -185,7 +184,7 @@ public class AddressBookDAO implements AddressBookInterface {
                 Maintain Dictionary of City and Person as well as State and Person
                 Finally get the count of Persons by City or State
 
-      Dated : 03.07.2021
+      @since : 03.07.2021
     */
 
     @Override
@@ -241,5 +240,18 @@ public class AddressBookDAO implements AddressBookInterface {
         }
         System.out.println("\nViewing Persons by City or State\n" +hSearch);
         System.out.println("\nNumber of contact persons i.e. count by City or State is : " +count +"\n");
+    }
+
+    /**
+     * Purpose : Sort entries in the Address Book based on First Name aphabetically
+     *
+     * @since : 06.07.2021
+     */
+
+    public void sortPerson() {
+        personInfoDict.keySet().forEach(entry -> {
+            List<PersonInfo> data = personInfoDict.get(entry).stream().sorted(Comparator.comparing(PersonInfo::getFirst_name)).collect(Collectors.toList());
+            System.out.println(data);
+        });
     }
 }
