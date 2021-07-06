@@ -1,5 +1,3 @@
-# BridgeLabz_Address_Book_System
-Start with Displaying Welcome to Address Book Program in AddressBookMain class on Master Branch
 
 ## Usecases
 1. Ability to create a Contacts in Address Book with first and last names, address, city, state, zip, phone number and email.
@@ -17,5 +15,11 @@ Start with Displaying Welcome to Address Book Program in AddressBookMain class o
     - Each Address Book has a unique Name 
     - Use Console to add new Address Book 
     - Maintain Dictionary of Address Book Name to Address Book
-7. Ability to ensure there is no Duplicate Entry of the same Person in a particular Address Book
+    
+#### Using Java Streams
+7. Ability to ensure there is no Duplicate Entry of the same Person in a particular Address Book.
+8. Search for Person in a City or State across the multiple AddressBook.
+9. View Persons by City or State.
+10. Get the count of Persons by City or State
+
 
