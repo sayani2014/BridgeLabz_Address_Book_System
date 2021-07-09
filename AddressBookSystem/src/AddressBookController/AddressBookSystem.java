@@ -7,13 +7,15 @@
  * Search and View the person details based on City or State in the Address Book
  * Get the total count of person details based on a particular City or State in the Address Book
  * Sort the entries in the address book alphabetically by Person’s name, City, State or Zip
+ * Read and Write Data in a .txt File using Java File IO
  *
  * @author: SAYANI KOLEY
- * @since: 06.07.2021
+ * @since: 09.07.2021
  */
 
 package AddressBookController;
 
+import AddressBookIOOperations.ReadWriteOperations;
 import AddressBookModel.PersonInfo;
 import AddressBookService.AddressBook;
 import Util.UserInputOutput;
@@ -33,6 +35,7 @@ public class AddressBookSystem {
 
     public static void main(String args[]){
         Hashtable<String, ArrayList<PersonInfo>> personInfoDict = new Hashtable<>();
+        ReadWriteOperations readWriteObj = new ReadWriteOperations();
 
         boolean flag = true;
         int option;
@@ -42,6 +45,7 @@ public class AddressBookSystem {
                 case ADD:
                     System.out.println("\n" + "Add a new Address Book");
                     personInfoDict = add_Book.insertContactDetails();
+                    readWriteObj.writeInAddressBook(personInfoDict);
                     //System.out.println(personInfoDict + "\n");
                     break;
                 case EDIT:
@@ -57,7 +61,8 @@ public class AddressBookSystem {
                     break;
                 case DISPLAY:
                     System.out.println("\n" + "Display all contacts in the Address Book");
-                    add_Book.displayCompanyContacts(personInfoDict);
+                    //add_Book.displayCompanyContacts(personInfoDict);
+                    readWriteObj.readFromAddressBook();
                     break;
                 case SEARCH_CITY:
                     System.out.println("\n" + "Search Address Book based on City or State");
