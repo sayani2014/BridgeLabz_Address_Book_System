@@ -7,14 +7,16 @@
  * Search and View the person details based on City or State in the Address Book
  * Get the total count of person details based on a particular City or State in the Address Book
  * Sort the entries in the address book alphabetically by Person’s name, City, State or Zip
- * Read and Write Data in a .txt File using Java File IO
+ * Read and Write Data Person Contact in a .txt File using Java File IO
+ * Read and Write Data Person Contact in a .csv File using OpenCSV Library
  *
  * @author: SAYANI KOLEY
- * @since: 09.07.2021
+ * @since: 11.07.2021
  */
 
 package AddressBookController;
 
+import AddressBookCSVOp.ReadWriteCSVFile;
 import AddressBookIOOperations.ReadWriteOperations;
 import AddressBookModel.PersonInfo;
 import AddressBookService.AddressBook;
@@ -36,6 +38,7 @@ public class AddressBookSystem {
     public static void main(String args[]){
         Hashtable<String, ArrayList<PersonInfo>> personInfoDict = new Hashtable<>();
         ReadWriteOperations readWriteObj = new ReadWriteOperations();
+        ReadWriteCSVFile csvObj = new ReadWriteCSVFile();
 
         boolean flag = true;
         int option;
@@ -46,6 +49,7 @@ public class AddressBookSystem {
                     System.out.println("\n" + "Add a new Address Book");
                     personInfoDict = add_Book.insertContactDetails();
                     readWriteObj.writeInAddressBook(personInfoDict);
+                    csvObj.writeCSVFile(personInfoDict);
                     //System.out.println(personInfoDict + "\n");
                     break;
                 case EDIT:
@@ -63,6 +67,7 @@ public class AddressBookSystem {
                     System.out.println("\n" + "Display all contacts in the Address Book");
                     //add_Book.displayCompanyContacts(personInfoDict);
                     readWriteObj.readFromAddressBook();
+                    csvObj.readCSVFile();
                     break;
                 case SEARCH_CITY:
                     System.out.println("\n" + "Search Address Book based on City or State");

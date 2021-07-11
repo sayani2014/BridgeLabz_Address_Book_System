@@ -41,6 +41,7 @@ public class ReadWriteOperations {
      */
 
     public void readFromAddressBook() {
+        System.out.println("\nReading Data from .txt file");
         try {
             Files.lines(new File(filePath).toPath())
                     .forEach(System.out::println);
