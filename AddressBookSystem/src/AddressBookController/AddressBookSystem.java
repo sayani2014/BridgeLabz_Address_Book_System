@@ -9,6 +9,7 @@
  * Sort the entries in the address book alphabetically by Person’s name, City, State or Zip
  * Read and Write Data Person Contact in a .txt File using Java File IO
  * Read and Write Data Person Contact in a .csv File using OpenCSV Library
+ * Read and Write Data Person Contact in a .csv File using GSON Library
  *
  * @author: SAYANI KOLEY
  * @since: 11.07.2021
@@ -18,9 +19,11 @@ package AddressBookController;
 
 import AddressBookCSVOp.ReadWriteCSVFile;
 import AddressBookIOOperations.ReadWriteOperations;
+import AddressBookJsonOp.ReadWriteJSONFile;
 import AddressBookModel.PersonInfo;
 import AddressBookService.AddressBook;
 import Util.UserInputOutput;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -39,6 +42,7 @@ public class AddressBookSystem {
         Hashtable<String, ArrayList<PersonInfo>> personInfoDict = new Hashtable<>();
         ReadWriteOperations readWriteObj = new ReadWriteOperations();
         ReadWriteCSVFile csvObj = new ReadWriteCSVFile();
+        ReadWriteJSONFile jsonObj = new ReadWriteJSONFile();
 
         boolean flag = true;
         int option;
@@ -50,6 +54,7 @@ public class AddressBookSystem {
                     personInfoDict = add_Book.insertContactDetails();
                     readWriteObj.writeInAddressBook(personInfoDict);
                     csvObj.writeCSVFile(personInfoDict);
+                    jsonObj.writeJSONFile(personInfoDict);
                     //System.out.println(personInfoDict + "\n");
                     break;
                 case EDIT:
@@ -68,6 +73,7 @@ public class AddressBookSystem {
                     //add_Book.displayCompanyContacts(personInfoDict);
                     readWriteObj.readFromAddressBook();
                     csvObj.readCSVFile();
+                    jsonObj.readJSONFile();
                     break;
                 case SEARCH_CITY:
                     System.out.println("\n" + "Search Address Book based on City or State");

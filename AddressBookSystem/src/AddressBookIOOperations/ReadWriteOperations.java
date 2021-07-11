@@ -8,42 +8,49 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Scanner;
 
 public class ReadWriteOperations {
-    String filePath = "src/AddressBookIOOperations/AddressBook.txt";
+    String filePath = "src/AddressBookIOOperations/";
 
     /**
      * Purpose : Ability to Write the Address Book with Persons Contact into a File using File IO
+     *           Create a .txt file based on the CompanyName and insert data specific to the CompanyName
      *
      * @param : personInfoDict
-     * @since : 09.07.2021
+     * @since : 11.07.2021
      */
 
     public void writeInAddressBook(Hashtable<String, ArrayList<PersonInfo>> personInfoDict) {
-        StringBuffer empBuffer = new StringBuffer();
         personInfoDict.forEach( (companyName, personInfos) -> {
-            String empDataString = companyName.concat(personInfos.toString().concat("\n"));
-            empBuffer.append(empDataString);
+            String filePathWrite = filePath + companyName + ".txt";
+            try {
+                Files.write(Paths.get(filePathWrite) , personInfos.toString().getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
-
-        try {
-            Files.write(Paths.get(filePath) , empBuffer.toString().getBytes());
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
-     * Purpose : Ability to Read the Address Book with Persons Contact into a File using File IO
+     * Purpose : Ability to read the data from a .txt file
+     *           Ask user for the CompanyName and display the data specific to the CompanyName
      *
      * @param : personInfoDict
-     * @since : 09.07.2021
+     * @since : 11.07.2021
      */
 
     public void readFromAddressBook() {
-        System.out.println("\nReading Data from .txt file");
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("\n\nReading Data from .txt file");
+        System.out.print("Enter the Company Name you want to read the details from : ");
+        String companyName = input.next();
+
+        String filePathRead = filePath + companyName +".txt";
+
         try {
-            Files.lines(new File(filePath).toPath())
+            Files.lines(new File(filePathRead).toPath())
                     .forEach(System.out::println);
         } catch (IOException ioException) {
             ioException.printStackTrace();

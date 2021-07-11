@@ -1,5 +1,7 @@
 package AddressBookModel;
 
+import com.google.gson.JsonElement;
+
 public class PersonInfo {
     String first_name;
     String last_name;

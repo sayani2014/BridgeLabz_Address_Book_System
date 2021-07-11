@@ -64,7 +64,7 @@ public class ReadWriteCSVFile {
         System.out.print("Enter the company name you want to read the details from : ");
         String companyName = input.next();
 
-        String filePathRead = "src/AddressBookCSVOp/" + companyName +".csv";
+        String filePathRead = filePath + companyName +".csv";
         try {
             FileReader filereader = new FileReader(filePathRead);
             CSVReader csvReader = new CSVReader(filereader);
