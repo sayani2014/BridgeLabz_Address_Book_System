@@ -22,6 +22,9 @@
 9. View Persons by City or State.
 10. Get the count of Persons by City or State.
 11. Sort the entries in the address book alphabetically by Person’s name.
-12. sort the entries in the address book by City, State, or Zip.
+12. Sort the entries in the address book by City, State, or Zip.
+
+#### Using Java IO
+13. Ability to Read and Write Data in a .txt File using Java File IO
 
 
