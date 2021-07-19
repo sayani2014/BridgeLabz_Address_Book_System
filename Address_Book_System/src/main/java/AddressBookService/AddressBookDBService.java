@@ -3,6 +3,7 @@ package AddressBookService;
 import AddressBookModel.PersonInfo;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class AddressBookDBService {
      * @return
      */
 
-    private List<PersonInfo> getEmployeePayrollDataUsingDB(String sql) {
+    private List<PersonInfo> getPersonInfoDataUsingDB(String sql) {
         List<PersonInfo> personInfoList = new ArrayList<>();
         try (Connection connection = this.getConnection()) {
             Statement statement = connection.createStatement();
@@ -82,7 +83,7 @@ public class AddressBookDBService {
 
     public List<PersonInfo> readData() {
         String sql = "SELECT * FROM address_book_records";
-        return getEmployeePayrollDataUsingDB(sql);
+        return getPersonInfoDataUsingDB(sql);
     }
 
     /**
@@ -179,5 +180,19 @@ public class AddressBookDBService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Purpose : Read the data for a certain date range from the database
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+
+    public List<PersonInfo> getPersonInfoData(LocalDate startDate, LocalDate endDate) {
+        String sql = String.format("SELECT * FROM address_book_records WHERE Date__Added BETWEEN '%s' AND '%s';",
+                Date.valueOf(startDate), Date.valueOf(endDate));
+        return getPersonInfoDataUsingDB(sql);
     }
 }

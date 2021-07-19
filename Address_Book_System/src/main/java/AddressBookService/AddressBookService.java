@@ -2,6 +2,7 @@ package AddressBookService;
 
 import AddressBookModel.PersonInfo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class AddressBookService {
@@ -75,4 +76,20 @@ public class AddressBookService {
         List<PersonInfo> personInfoDataList = addressBookDBService.getPersonInfoData(name);
         return personInfoDataList.get(0).equals(getPersonInfoData(name));
     }
+
+    /**
+     * Purpose : Retrieve the data for a particular date range
+     *
+     * @param ioService
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+
+    public List<PersonInfo> readPersonInfoForDateRange(IOService ioService, LocalDate startDate, LocalDate endDate) {
+        if( ioService.equals(IOService.DB_IO) )
+            return addressBookDBService.getPersonInfoData(startDate, endDate);
+        return null;
+    }
+
 }

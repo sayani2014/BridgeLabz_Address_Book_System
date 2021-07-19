@@ -2,6 +2,7 @@
  * UC16 : Ability for the AddressBook Service to retrieve all the Entries from the DB
  * UC17 : Ability to update the Contact Information in the address book for a person and ensure that the
  *        Contact Information in the memory is in Sync with the DB
+ * UC18 : Ability to Retrieve Contacts from the Database that were added in a particular period
  *
  * @author : SAYANI KOLEY
  * @since : 19.07.2021
@@ -15,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class AddressBookTest {
@@ -50,4 +52,18 @@ public class AddressBookTest {
         Assert.assertTrue(result);
     }
 
+    /**
+     * Purpose : To test whether the count of the retrieved data who have been added in the address book
+     *           in a particular data range matches with the expected value
+     */
+
+    @Test
+    public void givenDateRange_WhenRetrieved_ShouldMatchTheEmployeeCount() {
+        addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
+        LocalDate startDate = LocalDate.of(2019, 01, 01);
+        LocalDate endDate = LocalDate.now();
+        List<PersonInfo> employeePayrollData = addressBookService.readPersonInfoForDateRange
+                                                            (AddressBookService.IOService.DB_IO, startDate, endDate);
+        Assert.assertEquals(2, employeePayrollData.size());
+    }
 }
