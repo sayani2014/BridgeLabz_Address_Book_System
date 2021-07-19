@@ -1,5 +1,10 @@
 /**
  * UC16 : Ability for the AddressBook Service to retrieve all the Entries from the DB
+ * UC17 : Ability to update the Contact Information in the address book for a person and ensure that the
+ *        Contact Information in the memory is in Sync with the DB
+ *
+ * @author : SAYANI KOLEY
+ * @since : 19.07.2021
  */
 
 package AddressBookTesting;
@@ -29,4 +34,20 @@ public class AddressBookTest {
         List<PersonInfo> personInfoData = addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
         Assert.assertEquals(3, personInfoData.size());
     }
+
+    /**
+     * Purpose : To test whether the state is updated in the database and is synced with the DB
+     *           - Read the values from the database
+     *           - Update the state in the database
+     *           - Test whether the database is correctly synced or not
+     */
+
+    @Test
+    public void givenNewStateForPerson_WhenUpdated_ShouldSyncWithDB() {
+        addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
+        addressBookService.updatePersonInfo("Sayani", "West Bengal");
+        boolean result = addressBookService.checkPersonInfoInSyncWithDB("Sayani");
+        Assert.assertTrue(result);
+    }
+
 }

@@ -2,16 +2,18 @@ package AddressBookModel;
 
 import com.google.gson.JsonElement;
 
+import java.util.Objects;
+
 public class PersonInfo {
-    int id;
-    String first_name;
-    String last_name;
-    String address;
-    String city;
-    String state;
-    int zip;
-    String phone_number;
-    String email;
+    public int id;
+    public String first_name;
+    public String last_name;
+    public String address;
+    public String city;
+    public String state;
+    public int zip;
+    public String phone_number;
+    public String email;
 
     public PersonInfo() {
     }
@@ -110,4 +112,13 @@ public class PersonInfo {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonInfo that = (PersonInfo) o;
+        return id == that.id &&
+                Objects.equals(first_name, that.first_name) &&
+                Objects.equals(state, that.state);
+    }
 }
