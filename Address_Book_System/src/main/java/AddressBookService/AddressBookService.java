@@ -92,4 +92,31 @@ public class AddressBookService {
         return null;
     }
 
+    /**
+     * Purpose : Retrieve the data for a particular state
+     *
+     * @param ioService
+     * @param state
+     * @return
+     */
+
+    public List<PersonInfo> readPersonInfoForProvidedState(IOService ioService, String state) {
+        if( ioService.equals(IOService.DB_IO) )
+            return addressBookDBService.getPersonInfoDataProvidedState(state);
+        return null;
+    }
+
+    /**
+     * Purpose : Retrieve the data for a particular city
+     *
+     * @param ioService
+     * @param city
+     * @return
+     */
+
+    public List<PersonInfo> readPersonInfoForProvidedCity(IOService ioService, String city) {
+        if( ioService.equals(IOService.DB_IO) )
+            return addressBookDBService.getPersonInfoDataProvidedCity(city);
+        return null;
+    }
 }

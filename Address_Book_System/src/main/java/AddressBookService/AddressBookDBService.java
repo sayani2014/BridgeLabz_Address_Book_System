@@ -195,4 +195,27 @@ public class AddressBookDBService {
                 Date.valueOf(startDate), Date.valueOf(endDate));
         return getPersonInfoDataUsingDB(sql);
     }
+
+    /**
+     * Purpose : Read the data for a particular state from the database
+     * @param state
+     * @return
+     */
+
+    public List<PersonInfo> getPersonInfoDataProvidedState(String state) {
+        String sql = String.format("SELECT * FROM address_book_records WHERE State = '%s';", state);
+        return getPersonInfoDataUsingDB(sql);
+    }
+
+    /**
+     * Purpose : Read the data for a particular city from the database
+     *
+     * @param city
+     * @return
+     */
+
+    public List<PersonInfo> getPersonInfoDataProvidedCity(String city) {
+        String sql = String.format("SELECT * FROM address_book_records WHERE City = '%s';", city);
+        return getPersonInfoDataUsingDB(sql);
+    }
 }

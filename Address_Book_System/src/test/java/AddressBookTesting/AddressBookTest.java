@@ -3,6 +3,7 @@
  * UC17 : Ability to update the Contact Information in the address book for a person and ensure that the
  *        Contact Information in the memory is in Sync with the DB
  * UC18 : Ability to Retrieve Contacts from the Database that were added in a particular period
+ * UC19 : Ability to Retrieve number of Contacts in the Database by City or State
  *
  * @author : SAYANI KOLEY
  * @since : 19.07.2021
@@ -32,9 +33,9 @@ public class AddressBookTest {
      */
 
     @Test
-    public void givenPersonInfoInDB_WhenRetrieved_ShouldMatchEmployeeCount() {
+    public void givenPersonInfoInDB_WhenRetrieved_ShouldMatchPersonCount() {
         List<PersonInfo> personInfoData = addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
-        Assert.assertEquals(3, personInfoData.size());
+        Assert.assertEquals(4, personInfoData.size());
     }
 
     /**
@@ -58,12 +59,36 @@ public class AddressBookTest {
      */
 
     @Test
-    public void givenDateRange_WhenRetrieved_ShouldMatchTheEmployeeCount() {
+    public void givenDateRange_WhenRetrieved_ShouldMatchThePersonCount() {
         addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
         LocalDate startDate = LocalDate.of(2019, 01, 01);
         LocalDate endDate = LocalDate.now();
-        List<PersonInfo> employeePayrollData = addressBookService.readPersonInfoForDateRange
+        List<PersonInfo> personInfoData = addressBookService.readPersonInfoForDateRange
                                                             (AddressBookService.IOService.DB_IO, startDate, endDate);
-        Assert.assertEquals(2, employeePayrollData.size());
+        Assert.assertEquals(3, personInfoData.size());
+    }
+
+    /**
+     * Purpose : To test whether number of Contacts searched in the Database by State matches the expected value
+     */
+
+    @Test
+    public void givenStateNameInDB_WhenRetrieved_ShouldMatchPersonCount() {
+        addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
+        List<PersonInfo> personInfoData = addressBookService.readPersonInfoForProvidedState
+                                                (AddressBookService.IOService.DB_IO, "West Bengal");
+        Assert.assertEquals(2, personInfoData.size());
+    }
+
+    /**
+     * Purpose : To test whether number of Contacts searched in the Database by City matches the expected value
+     */
+
+    @Test
+    public void givenCityNameInDB_WhenRetrieved_ShouldMatchPersonCount() {
+        addressBookService.readPersonInfoData(AddressBookService.IOService.DB_IO);
+        List<PersonInfo> personInfoData = addressBookService.readPersonInfoForProvidedCity
+                                                        (AddressBookService.IOService.DB_IO, "Howrah");
+        Assert.assertEquals(1, personInfoData.size());
     }
 }
