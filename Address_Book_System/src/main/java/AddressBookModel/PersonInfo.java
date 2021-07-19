@@ -3,6 +3,7 @@ package AddressBookModel;
 import com.google.gson.JsonElement;
 
 public class PersonInfo {
+    int id;
     String first_name;
     String last_name;
     String address;
@@ -13,20 +14,6 @@ public class PersonInfo {
     String email;
 
     public PersonInfo() {
-    }
-
-    @Override
-    public String toString() {
-        return "PersonInfo{" +
-                "first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zip=" + zip +
-                ", phone_number='" + phone_number + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 
     public PersonInfo(String first_name, String last_name, String address, String city, String state, int zip, String phone_number, String email) {
@@ -40,7 +27,12 @@ public class PersonInfo {
         this.email = email;
     }
 
-    public String getFirst_name() {
+    public PersonInfo(int id,String first_name, String last_name, String address, String city, String state, int zip, String phone_number, String email) {
+        this(first_name, last_name, address, city, state, zip, phone_number, email);
+        this.id = id;
+    }
+
+        public String getFirst_name() {
         return first_name;
     }
 
@@ -103,4 +95,19 @@ public class PersonInfo {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "PersonInfo{" +
+                "first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip=" + zip +
+                ", phone_number='" + phone_number + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
 }
