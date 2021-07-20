@@ -33,5 +33,12 @@
 #### Using GSON
 15. Ability to Read and Write Data in a .json File 
 
+#### JDBC and JUnit Testing
+16. Ability for the AddressBook Service to retrieve all the Entries from the DB
+17. Ability to update the Contact Information in the address book for a person and ensure that the Contact Information in the memory is in Sync with the DB
+18. Ability to Retrieve Contacts from the Database that were added in a particular period
+19. Ability to Retrieve number of Contacts in the Database by City or State
+20. Ability to Add new Contact to the Address Book Database
+
 
 
