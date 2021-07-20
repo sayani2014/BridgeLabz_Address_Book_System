@@ -30,6 +30,14 @@ public class AddressBookService {
         return this.personInfoList;
     }
 
+
+    public List<PersonInfo> readPersonInfoDataFromDB(IOService ioService) {
+        if(ioService.equals(IOService.DB_IO))
+            this.personInfoList = addressBookDBService.readDataFromNewDB();
+        return this.personInfoList;
+    }
+
+
     /**
      * Purpose : To update the Person Info State in the database
      *           If the value is updated, the result value returned is greater than 0; else it is returned 0
@@ -78,6 +86,19 @@ public class AddressBookService {
     }
 
     /**
+     * Purpose : To check whether the PersonInfo is in sync with the DB
+     *           Use to equals() to compare the values
+     *
+     * @param name
+     * @return
+     */
+
+    public boolean checkPersonInfoInSyncWithNewDB(String name) {
+        List<PersonInfo> personInfoDataList = addressBookDBService.getPersonInfoDataFromNewDB(name);
+        return personInfoDataList.get(0).equals(getPersonInfoData(name));
+    }
+
+    /**
      * Purpose : Retrieve the data for a particular date range
      *
      * @param ioService
@@ -118,5 +139,26 @@ public class AddressBookService {
         if( ioService.equals(IOService.DB_IO) )
             return addressBookDBService.getPersonInfoDataProvidedCity(city);
         return null;
+    }
+
+    /**
+     * Purpose : Add new Contact to the Address Book Database
+     *
+     * @param id
+     * @param fname
+     * @param lname
+     * @param street
+     * @param city
+     * @param state
+     * @param zip
+     * @param type
+     * @param phoneNo
+     * @param email
+     * @return
+     */
+
+    public PersonInfo addPerson(int id, String fname, String lname, String street, String city, String state,
+                                int zip, String type, String phoneNo, String email) {
+        return addressBookDBService.addPersonInDB(id, fname, lname, street, city, state, zip, type, phoneNo, email);
     }
 }

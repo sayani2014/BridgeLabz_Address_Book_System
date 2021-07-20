@@ -87,6 +87,50 @@ public class AddressBookDBService {
     }
 
     /**
+     * Purpose : Read the person info from the new database
+     *
+     * @return
+     */
+
+    public List<PersonInfo> readDataFromNewDB() {
+        String sql = "SELECT person_details.P_ID, first_name, last_name, street_address, city, zip, state, Phone_No, " +
+                                "Email_ID FROM person_details JOIN person_phone JOIN person_email ON " +
+                                "person_phone.P_ID = person_details.P_ID AND person_email.P_ID = person_details.P_ID;";
+        return getPersonInfoDataUsingNewDB(sql);
+    }
+
+    /**
+     * Purpose : Create connection to execute query and read the value from the new database
+     *           Assign the value in a list variable
+     *
+     * @param sql
+     * @return
+     */
+
+    private List<PersonInfo> getPersonInfoDataUsingNewDB(String sql) {
+        List<PersonInfo> personInfoList = new ArrayList<>();
+        try (Connection connection = this.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("P_ID");
+                String fname = resultSet.getString("first_name");
+                String lname = resultSet.getString("last_name");
+                String address = resultSet.getString("street_address");
+                String city = resultSet.getString("city");
+                String state = resultSet.getString("state");
+                int zip = resultSet.getInt("zip");
+                String phone = resultSet.getString("Phone_No");
+                String email = resultSet.getString("Email_ID");
+                personInfoList.add(new PersonInfo(id, fname, lname, address, city, state, zip, phone,email));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return personInfoList;
+    }
+
+    /**
      * Purpose : Update the state in the DB using Statement Interface
      *
      * @param name
@@ -218,4 +262,151 @@ public class AddressBookDBService {
         String sql = String.format("SELECT * FROM address_book_records WHERE City = '%s';", city);
         return getPersonInfoDataUsingDB(sql);
     }
+
+    /**
+     * Purpose : Add new Contact to the Address Book Database
+     *           If multiple tables are impacted then ensure the DB Transaction is implemented
+     *
+     * @param id
+     * @param fname
+     * @param lname
+     * @param street
+     * @param city
+     * @param state
+     * @param zip
+     * @param type
+     * @param phoneNo
+     * @param email
+     * @return
+     */
+
+    public PersonInfo addPersonInDB(int id, String fname, String lname, String street, String city, String state,
+                                    int zip, String type, String phoneNo, String email) {
+        int personID = -1;
+        PersonInfo personInfoData = null;
+        Connection connection = null;
+
+        try {
+            connection = this.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format("INSERT INTO person_details (P_ID, first_name, last_name, street_address, city, "
+                                            + "zip, state) VALUES ('%d', '%s', '%s', '%s', '%s', '%d', '%s')",
+                                                     id, fname, lname, street, city, zip, state);
+            int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+            if(rowAffected == 1) {
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if(resultSet.next())
+                    personID = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format("INSERT INTO person_email (P_ID, Email_ID) VALUES (" +
+                    "(SELECT P_ID FROM person_details WHERE first_name = '%s'), '%s')", fname, email);
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format("INSERT INTO person_phone (P_ID, Phone_No) VALUES (" +
+                    "(SELECT P_ID FROM person_details WHERE first_name = '%s'), '%s')", fname, phoneNo);
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format("INSERT INTO type (Type) VALUES ('%s')", type);
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format("INSERT INTO person_type (P_ID, T_ID) VALUES " +
+                    "((SELECT P_ID FROM person_details WHERE first_name = '%s'), " +
+                    "(SELECT T_ID FROM type WHERE Type = '%s'))", fname, type);
+
+            int rowAffected = statement.executeUpdate(sql);
+            if(rowAffected == 1)
+                personInfoData = new PersonInfo(id, fname, lname, street, city, state, zip, phoneNo, email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return personInfoData;
+    }
+
+    /**
+     * Purpose : Get the list of PersonInfoData
+     *           setString() is used to set the assigned name value in the sql query
+     *           Return all the attribute values listed for a particular name
+     *
+     * @return
+     */
+
+    public List<PersonInfo> getPersonInfoDataFromNewDB(String fname) {
+        List<PersonInfo> personInfoList = null;
+        if(this.personInfoDataStatement == null)
+            this.preparedStatementForPersonInfoFromNewDB(fname);
+        try {
+            ResultSet resultSet = personInfoDataStatement.executeQuery();
+            personInfoList = this.getPersonInfoDataFromNewDB(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return personInfoList;
+    }
+
+    /**
+     * Purpose : To get the details of a particular person from the DB using PreparedStatement Interface
+     */
+
+    private void preparedStatementForPersonInfoFromNewDB(String fname) {
+        try {
+            Connection connection = this.getConnection();
+            String sql = String.format("SELECT person_details.P_ID, first_name, last_name, street_address, city, zip, state, " +
+                    "Phone_No, Email_ID FROM person_details JOIN person_phone JOIN person_email ON " +
+                    "person_phone.P_ID = person_details.P_ID AND person_email.P_ID = person_details.P_ID" +
+                    " WHERE first_name = '%s';", fname);
+            personInfoDataStatement = connection.prepareStatement(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Purpose : Assign the value of the attributes in a list and return it
+     *
+     * @param resultSet
+     * @return
+     */
+
+    private List<PersonInfo> getPersonInfoDataFromNewDB(ResultSet resultSet) {
+        List<PersonInfo> personInfoList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("P_ID");
+                String fname = resultSet.getString("first_name");
+                String lname = resultSet.getString("last_name");
+                String address = resultSet.getString("street_address");
+                String city = resultSet.getString("city");
+                String state = resultSet.getString("state");
+                int zip = resultSet.getInt("zip");
+                String phone = resultSet.getString("Phone_No");
+                String email = resultSet.getString("Email_ID");
+                personInfoList.add(new PersonInfo(id, fname, lname, address, city, state, zip, phone,email));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return personInfoList;
+    }
+
 }

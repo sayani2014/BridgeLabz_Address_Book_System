@@ -4,6 +4,7 @@
  *        Contact Information in the memory is in Sync with the DB
  * UC18 : Ability to Retrieve Contacts from the Database that were added in a particular period
  * UC19 : Ability to Retrieve number of Contacts in the Database by City or State
+ * UC20 : Ability to Add new Contact to the Address Book Database
  *
  * @author : SAYANI KOLEY
  * @since : 19.07.2021
@@ -90,5 +91,18 @@ public class AddressBookTest {
         List<PersonInfo> personInfoData = addressBookService.readPersonInfoForProvidedCity
                                                         (AddressBookService.IOService.DB_IO, "Howrah");
         Assert.assertEquals(1, personInfoData.size());
+    }
+
+    /**
+     * Purpose : To test the ability to add new contact in the database and check the database is in sync with the PersonInfo
+     */
+
+    @Test
+    public void givenNewPerson_WhenAdded_ShouldSyncWithDB() {
+        addressBookService.addPerson(101, "Ajay", "Kulkarni", "Patiala", "Patiala",
+                "Punjab", 456789, "Professional", "4587962310", "ak1@abc.in");
+        addressBookService.readPersonInfoDataFromDB(AddressBookService.IOService.DB_IO);
+        boolean result = addressBookService.checkPersonInfoInSyncWithNewDB("Ajay");
+        Assert.assertTrue(result);
     }
 }
